@@ -60,6 +60,7 @@ public class Dbutil extends DbBase {
 		return null;
 	}
 
+	@SuppressWarnings("Duplicates")
 	public List<Object[]> getDataListBySQL(Connection conn, String sql, Map varMap){
 		List<Object[]> result = new LinkedList<>();
 		try {
@@ -84,7 +85,7 @@ public class Dbutil extends DbBase {
 		while (rs.next()){
 			obj = new Object[columnNum];
 			for (int i = 1; i <= columnNum; i++){
-				if (needTime.indexOf("," + i + ",") != -1){
+				if (needTime.contains("," + i + ",")){
 					obj[i-1] = rs.getTimestamp(i);
 				}else {
 					obj[i-1] = rs.getObject(i);
@@ -96,13 +97,13 @@ public class Dbutil extends DbBase {
 	
 	private String getTimeTypeColumnIndex(int columnNum,ResultSetMetaData rsmd) throws SQLException{
 		String columnType;
-		String result = "";
+		StringBuilder result = new StringBuilder();
 		for (int i = 1; i <= columnNum; i++){
 			columnType = rsmd.getColumnTypeName(i);
 			if (columnType != null && "DATE".equals(columnType.toUpperCase())){
-				result += "," + i + ",";
+				result.append(",").append(i).append(",");
 			}
 		}
-		return result;
+		return result.toString();
 	}
 }

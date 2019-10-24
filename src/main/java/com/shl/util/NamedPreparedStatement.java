@@ -56,6 +56,7 @@ public class NamedPreparedStatement {
 			parseSql.append(c);
 		}
 		transIndexMap();
+		System.out.println(">>>>>>>>>>>>>sql = " + parseSql);
 		return parseSql.toString();
 	}
 	
