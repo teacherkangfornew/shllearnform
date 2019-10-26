@@ -40,8 +40,8 @@ public class MoralRecordDataAdd  extends DbBase{
 
     void staticall(String campusId, String quotaId) {
         // 将campusId 校区的所有学生信息配齐
-        StringBuilder sql = new StringBuilder(1000);
         long allStart = System.currentTimeMillis();
+        StringBuilder sql = new StringBuilder(1000);
         sql.append("SELECT " +
                 " student.id, " +
                 " studyphase.campus_id, " +
@@ -69,13 +69,17 @@ public class MoralRecordDataAdd  extends DbBase{
                 "LEFT JOIN edu_base_studyphase studyphase ON student.study_phase_id = studyphase.id " +
                 "LEFT JOIN edu_base_campus campus ON studyphase.campus_id = campus.id " +
                 "WHERE " +
-                " student.status = 0 " +
+                " student.status = 0 and campus.id=:campusId " +
                 "ORDER BY " +
                 " studyphase.sort_num, " +
                 " class.class_name, " +
                 " student.student_name");
+
         Dbutil db = new Dbutil();
-        List<Object[]> studentInfo = db.getDataListBySQL(sql.toString(), null);
+        Map<String, Object> varMap = new HashMap<>(8);
+        varMap.put("campusId", campusId);
+        List<Object[]> studentInfo = db.getDataListBySQL(sql.toString(), varMap);
+        System.out.println(">>>>>>>>>>>>>>收集学生信息 耗时 ：" + (System.currentTimeMillis() - allStart) / 1000.0 + " 秒");
         // 所有学生id串，后面组合使用
         StringBuilder stuIds = new StringBuilder(",");
         // 每个学生id的下标是多少，方便快速定位
@@ -109,7 +113,7 @@ public class MoralRecordDataAdd  extends DbBase{
                 "AND mark.campus_id =:campusId and stu_number in (:stuIds) " +
                 "GROUP BY " +
                 " stu_number ");
-        Map<String, Object> varMap = new HashMap<>(8);
+        varMap.clear();
         varMap.put("campusId", campusId);
         varMap.put("quotaId", quotaId);
         varMap.put("stuIds", stuIdsList);
@@ -150,6 +154,7 @@ public class MoralRecordDataAdd  extends DbBase{
         }
     }
 
+    @SuppressWarnings("JpaQueryApiInspection")
     void  fullAddColumn() throws SQLException, ClassNotFoundException {
         Dbutil db = new Dbutil();
         String sql = "select student.id, student.student_code, student.student_name " +
