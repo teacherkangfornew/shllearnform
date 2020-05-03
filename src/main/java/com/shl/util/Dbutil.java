@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +23,27 @@ public class Dbutil extends DbBase {
 			int columnNum = rsmd.getColumnCount();
 			String needTime = getTimeTypeColumnIndex(columnNum,rsmd);
 			createResultList(result, rs, columnNum, needTime);
+		}catch( SQLException sqlException){
+			System.out.println(">>>执行SQL错误");
+			sqlException.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			System.out.println(">>>加载数据库出错");
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	public List<Map> findListMapByNativeSql(String sql,Map varMap){
+		List<Map> result = new LinkedList<>();
+		try {
+			begin();
+			NamedPreparedStatement nps = new NamedPreparedStatement(conn,sql);
+			nps.setVarMap(varMap);
+			ResultSet rs = nps.executeQuery();
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int columnNum = rsmd.getColumnCount();
+			String needTime = getTimeTypeColumnIndex(columnNum,rsmd);
+			resulListMap(result, rs, columnNum, needTime);
 		}catch( SQLException sqlException){
 			System.out.println(">>>执行SQL错误");
 			sqlException.printStackTrace();
@@ -92,6 +113,25 @@ public class Dbutil extends DbBase {
 				}
 			}
 			result.add(obj);
+		}
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private void resulListMap(List result,ResultSet rs,int columnNum,String needTime ) throws SQLException{
+		Map ele;
+		String lable;
+		ResultSetMetaData rsmd = rs.getMetaData();
+		while (rs.next()){
+			ele = new HashMap();
+			for (int i = 1; i <= columnNum; i++){
+				lable = rsmd.getColumnLabel(i);
+				if (needTime.contains("," + i + ",")){
+					ele.put(lable, rs.getTimestamp(i));
+				}else {
+					ele.put(lable, rs.getObject(i));
+				}
+			}
+			result.add(ele);
 		}
 	}
 	

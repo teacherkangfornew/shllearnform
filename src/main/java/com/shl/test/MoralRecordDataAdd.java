@@ -1,6 +1,5 @@
 package com.shl.test;
 
-import com.graphbuilder.math.VarMap;
 import com.shl.util.CommonUtil;
 import com.shl.util.DbBase;
 import com.shl.util.Dbutil;
@@ -8,7 +7,6 @@ import com.shl.vo.VO;
 
 import java.math.BigDecimal;
 import java.sql.*;
-import java.text.Bidi;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
@@ -22,21 +20,9 @@ public class MoralRecordDataAdd  extends DbBase{
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
 
         MoralRecordDataAdd moralRecordDataAdd = new MoralRecordDataAdd();
-        // moralRecordDataAdd.excute();
-       /* List<Object[]> list = moralRecordDataAdd.search();
-        Map<String, VO> map = null;
-        long start = System.currentTimeMillis();
-        try {
-            map = moralRecordDataAdd.threadSearch();
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
-        long end = System.currentTimeMillis();
-        System.out.println(">>>>>>>>>>并发耗时 -----------" + (end - start) / 1000.0 + "秒");*/
-
-        // moralRecordDataAdd.fullAddColumn();
-        moralRecordDataAdd.staticall("8aa376486cb1f681016cb62b3ebe006e", "8aa376486d0b9c14016d1de5b2380203");
     }
+
+
 
     void staticall(String campusId, String quotaId) {
         // 将campusId 校区的所有学生信息配齐

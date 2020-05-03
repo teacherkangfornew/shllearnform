@@ -1,7 +1,7 @@
 package com.shl.util;
 
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -19,7 +19,8 @@ public class DbBase {
 	static {
 		try {
 			// dbconfig.properties
-			dbconfig.load(new FileInputStream("D:/dbconfig.properties"));
+			InputStream in = ClassLoader.getSystemClassLoader().getResourceAsStream("dbconfig.properties");
+			dbconfig.load(in);
 		} catch (IOException e) {
 			System.out.println(">>>读取配置错误");
 			e.printStackTrace();
