@@ -5,6 +5,7 @@ import com.shl.util.DbBase;
 import com.shl.util.Dbutil;
 import com.shl.vo.VO;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.*;
@@ -18,10 +19,67 @@ public class MoralRecordDataAdd  extends DbBase{
     private static final int MAX = 200000;
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
+        File f = new File("D:/stulist.txt");
+        System.out.println(f.getName());
 
-        MoralRecordDataAdd moralRecordDataAdd = new MoralRecordDataAdd();
     }
 
+    void fillterStuCode() {
+        String[] stuCodeArr = new String[]{"BG20170608",
+                "BG20170522",
+                "BG20170711",
+                "BG20170410",
+                "BG20170802",
+                "BG20170612",
+                "BG20170318",
+                "BG20170805",
+                "BG20170926",
+                "BG20170817",
+                "BG20170929",
+                "BG20170813",
+                "BG20170134",
+                "BG20170619",
+                "BG20170728",
+                "BG20170932",
+                "BG20170833",
+                "BG20170505",
+                "BG20170437",
+                "BG20170237",
+                "BG20170702",
+                "BG20170503",
+                "BG20170219",
+                "BG20170616",
+                "BG20170604",
+                "BG20170436",
+                "BG20170719",
+                "BG20170422",
+                "BG20170429",
+                "BG20170714",
+                "BG20170538",
+                "BG20170317",
+                "BG20170734",
+                "BG20170343",
+                "BG20170935",
+                "BG20170743",
+                "BG20170545",
+                "BG20170542",
+                "BG20170546",
+                "BG20170739",
+                "BG20170548",
+                "BG20170637"};
+
+        String sql = " select stu.student_name, stu.student_code,stu.class_id from edu_base_student stu where stu.student_code in (:stuCode) ";
+        Dbutil db = new Dbutil();
+        Map<String, Object> varMap = new HashMap<>(2);
+        for (String s : stuCodeArr) {
+            varMap.clear();
+            varMap.put("stuCode", s);
+            List<Object[]> list = db.getDataListBySQL(sql, varMap);
+            if (list.isEmpty()) {
+                System.out.println(s);
+            }
+        }
+    }
 
 
     void staticall(String campusId, String quotaId) {

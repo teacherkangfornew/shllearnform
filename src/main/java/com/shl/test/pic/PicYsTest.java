@@ -10,5 +10,7 @@ public class PicYsTest {
         Thumbnails.of(picPath + "eee.bmp")
                 .scale(1f).outputQuality(0.15f)
                 .toFile(picPath + "e.jpg");
+
+        System.out.println(System.currentTimeMillis());
     }
 }
